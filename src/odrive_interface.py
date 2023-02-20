@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import odrive
+from odrive.enums import *
+from odrive.
 import logging
 import time
 import rospy
@@ -25,14 +27,17 @@ class frostyOdrive:
             except:
                 print("Error cannot find odrive")
     
-    def driveMotors(self, velo, omega, base, radius):
+    def teleOpDriveMotors(self, velo, omega, base, radius):
         angular_left = (velo - (omega *(base/2)))/radius
         angular_right = (velo + (omega *(base/2)))/radius
 
         # set the velocity control mode
-        self.motor1.config.control_mode = ControlMode.VELOCITY_CONTROL
+        self.motor1.config.control_mode = CONTROL_MODE_VELOCITY_CONTROL
         self.motor1.controller.input_vel = angular_right # this is the right motor
-        
+    
+    def testDriveMotor(self):
+        self.motor1.config.control_mode = CONTROL_MODE_VELOCITY_CONTROL
+        self.motor1.config.vel
 
 
     def runCalibration(self):
