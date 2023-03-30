@@ -2,7 +2,7 @@
 
 import odrive
 from odrive.enums import *
-from odrive.
+from odrive import *
 import logging
 import time
 import rospy
@@ -36,8 +36,10 @@ class frostyOdrive:
         self.motor1.controller.input_vel = angular_right # this is the right motor
     
     def testDriveMotor(self):
+        print("starting the motors!!!!")
+        print("----------------------- Make sure hands and wires are out of the motors -----------------------------")
         self.motor1.config.control_mode = CONTROL_MODE_VELOCITY_CONTROL
-        self.motor1.config.vel
+        self.motor1.controller.input_vel = 5
 
 
     def runCalibration(self):
