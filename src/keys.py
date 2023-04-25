@@ -1,11 +1,10 @@
 #!/usr/bin/env python
-# import rospy
-import keyboard
+import rospy
 import tty, sys, termios
 if sys.platform == 'win32':
     import msvcrt
 from select import select
-# from geometry_msgs.msg import Twist
+from geometry_msgs.msg import Twist
 
 
 
@@ -35,25 +34,34 @@ def getKeyPress():
     return key
     
 
-def send_cmd_vel(key):
-#     cmd_vel = Twist()
+def send_cmd_vel(twist_pub):
+    t = Twist()
     cmd = None
+    key = getKeyPress()
     if key in key_mappings:
         # cmd_vel.linear.x = key_mappings[key]
         cmd = key_mappings[key]
-    # return cmd_vel
-    print(cmd)
+        t.linear.x = cmd
+        twist_pub.publish(t)
+    else:
+        print("That key is not mapped to anything!")
+    
+    
+    # print(cmd)
 
 
 
 if __name__=="__main__":
+
     # ROS node initialization
     rospy.init_node("Keys")
-    pub = rospy.Publisher("keys_cmd", Twist, queue_size=10)
+    pub = rospy.Publisher("cmd_vel", Twist, queue_size=1)
     rate = rospy.Rate(100)
-    while True:
-        keys = getKeyPress()
-        send_cmd_vel(keys)
+
+    keys = getKeyPress()
+    send_cmd_vel(keys)
+
+    rospy.spin()
 
     # while(true):
     #     event=keyboard.read_event()
