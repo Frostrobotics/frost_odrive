@@ -34,36 +34,38 @@ def getKeyPress():
     return key
     
 
-def send_cmd_vel(twist_pub):
+def send_cmd_vel():
+    rospy.init_node("Keys")
+    pub = rospy.Publisher("cmd_vel", Twist, queue_size=1)
+    rate = rospy.Rate(10) # 10Hz
+
     t = Twist()
     cmd = None
     key = getKeyPress()
-    if key in key_mappings:
-        # cmd_vel.linear.x = key_mappings[key]
-        cmd = key_mappings[key]
-        t.linear.x = cmd
-        twist_pub.publish(t)
-    else:
-        print("That key is not mapped to anything!")
-    
-    
-    # print(cmd)
+
+    while not rospy.is_shutdown():
+        if key in key_mappings:
+            # cmd_vel.linear.x = key_mappings[key]
+            cmd = key_mappings[key]
+            t.linear.x = cmd
+            rospy.loginfo(t)
+            # print("THIS IS PUBLISHING: ", cmd)
+            pub.publish(t)
+        else:
+            print("That key is not mapped to anything!")
 
 
 
 if __name__=="__main__":
 
     # ROS node initialization
-    rospy.init_node("Keys")
-    pub = rospy.Publisher("cmd_vel", Twist, queue_size=1)
-    rate = rospy.Rate(100)
+    # rospy.init_node("Keys")
+    # pub = rospy.Publisher("cmd_vel", Twist, queue_size=1)
+    # rate = rospy.Rate(100)
 
-    keys = getKeyPress()
-    send_cmd_vel(keys)
-
-    rospy.spin()
-
-    # while(true):
-    #     event=keyboard.read_event()
-    #     pub.publish(send_cmd_vel(event.name.lower()))
-    #     rate.sleep() 
+    # keys = getKeyPress()
+    try:
+        send_cmd_vel()
+    except rospy.ROSInterruptException:
+        print("WE HAVE AN ERROR")
+        pass
