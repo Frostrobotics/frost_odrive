@@ -30,20 +30,20 @@ def getKeyPress():
             key = ''
         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
     
-    print(key)
+    # print(key)
     return key
     
 
 def send_cmd_vel():
     rospy.init_node("Keys")
     pub = rospy.Publisher("cmd_vel", Twist, queue_size=1)
-    rate = rospy.Rate(10) # 10Hz
+    rate = rospy.Rate(100) # 10Hz
 
     t = Twist()
     cmd = None
-    key = getKeyPress()
 
     while not rospy.is_shutdown():
+        key = getKeyPress()
         if key in key_mappings:
             # cmd_vel.linear.x = key_mappings[key]
             cmd = key_mappings[key]

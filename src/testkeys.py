@@ -4,7 +4,7 @@ from geometry_msgs.msg import Twist
 
 def cmd_vel_callback(msgs):
     # rospy.loginfo("Linear Velocity: %s", data.linear.x)
-    print(msgs.data)
+    print(msgs)
 
 def listener():
     rospy.init_node("test_keys_cmd_listener")
