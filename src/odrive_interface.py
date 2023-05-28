@@ -47,13 +47,15 @@ class frostyOdrive:
             logging.warning("Don't touch the robot calibrating motor")
             self.motor1.requested_state = AXIS_STATE_FULL_CALIBRATION_SEQUENCE
             time.sleep(1)
+            
+            self.calibration = True
 
             return True
         else:
             logging.warning("Motor Already calibrated theres no need")
     
     def runMotor(self, velocity):
-        if self.calibration:
-            self.motor1.controller.input_vel = 10
-            time.sleep(10)
-            self.motor1.controller.input_vel = 0
+        # if self.calibration:
+        self.motor1.controller.input_vel = velocity
+            # time.sleep(10)
+            # self.motor1.controller.input_vel = 0
